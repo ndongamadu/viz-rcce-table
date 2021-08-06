@@ -1,3 +1,19 @@
+
+body {
+    font-weight: 300;
+}
+
+.description {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.description h6 {
+
+    font-size: 14px;
+    font-weight: 300;
+}
+
 table {
 	margin-bottom: 10px;
 }
@@ -39,5 +55,31 @@ table tbody tr td {
     white-space: pre-wrap; 
 }
 td h6 {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.kf-content {
+	border: 1px solid #e6e7e8;
+	padding: 5px 0 10px;
+	margin-bottom: 15px;
+    text-align: center;
+  }
+
+.kf-content > h2 {
+    font-weight: 300;
+}
+.kf-content > h5 {
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.kf-header {
+      background-color:#E9F2FB;
+        display: inline-block;
+        margin-top: 20px;
+        padding: 15px;
+        width: 100%;
+        text-align: center;
+        
 }

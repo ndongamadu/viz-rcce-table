@@ -9,7 +9,6 @@ $(document).ready(function(){
             d3.csv(data_url)
         ]).then(function(d){
             data = d[0];
-            console.log(data);
 
             var dtData = [];
             data.forEach(element => {
@@ -79,14 +78,20 @@ $(document).ready(function(){
                     row.child(format(row.data())).show();
                     tr.addClass('shown');
                 }
-            })
-
+            });
+        
+            // generateKeyFigures();
         })
     
         
     } //getData
 
     getData();
+
+    function generateKeyFigures(){
+        $('#keyFigs').html("");
+
+    }
 
 
 
