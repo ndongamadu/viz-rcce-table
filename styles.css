@@ -1,0 +1,43 @@
+table {
+	margin-bottom: 10px;
+}
+
+table, th, td {
+	/* border-bottom: 1px solid #D2D2D2; */
+    /* border-top: 1px solid #D2D2D2; */
+    border-collapse: collapse;
+ 	padding: 10px;
+}
+
+table th {
+	cursor: pointer;
+}
+
+table th i.fas {
+	display: inline;
+    padding-left: 3px;
+}
+
+table thead {
+	/* background-color: #D2D2D2; */
+	font-size: 14px;
+    white-space: nowrap; 
+    
+}
+
+table tbody {
+	font-size: 12px;
+	/* line-height: 14px; */
+}
+
+table tbody tr:hover {
+	background-color: #FFF;
+}
+
+table tbody tr td {
+    /* min-width: 200px; */
+    white-space: pre-wrap; 
+}
+td h6 {
+    font-size: 10px;
+}
