@@ -9,63 +9,46 @@ body {
 }
 
 .description h6 {
-
     font-size: 14px;
     font-weight: 300;
-}
-
-table .display{
-	margin-bottom: 10px;
-    background-color: #fff;
-}
-
-table, th, td {
-	/* border-bottom: 1px solid #D2D2D2; */
-    /* border-top: 1px solid #D2D2D2; */
-    border-collapse: collapse;
- 	padding: 10px;
-}
-
-
-
-table th i.fas {
-	display: inline;
-    padding-left: 3px;
 }
 
 .fa, .fas {
     color: green;
     font-size: 16px;
 }
-table thead {
+#datatable thead {
 	/* background-color: #D2D2D2; */
 	font-size: 14px;
     white-space: nowrap; 
-    text-align: left;
     text-transform: uppercase;
     
 }
 
-table tbody {
-	font-size: 12px;
-	/* line-height: 14px; */
-}
-table tbody tr{
-	border-bottom: #ccc;
-    border-bottom: 1px;
+
+#datatable tbody {
+	font-size: 14px;
+    white-space: pre-wrap;
+	line-height: 14px;
+    text-align: left;
+    font-weight: 300;
 }
 
-table tbody tr:hover {
-	background-color: #FFF;
+#datatable > tbody > tr:hover {
+	background-color: rgb(250, 247, 247);
 }
+/* 
+.tabDetail > tbody > tr:hover {
+	background-color:red;
+} */
 
-table tbody tr td {
-    /* min-width: 200px; */
-    white-space: pre-wrap; 
-}
-td h6 {
+#datatable, td h6 {
     font-size: 12px;
     font-weight: bold;
+}
+
+.tabDetail > tbody > tr{
+    background-color: #A3CDD9;
 }
 
 .kf-content {
@@ -91,4 +74,15 @@ td h6 {
         width: 100%;
         text-align: center;
         
+}
+
+.inner > h6 {
+    font-size: 14px;
+    color: #506AD4;
+    margin: 0;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.inner {
+    font-size: 13px;
 }

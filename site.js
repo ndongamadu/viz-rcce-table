@@ -14,6 +14,12 @@ $(document).ready(function(){
             data.forEach(element => {
                 var href = '<a href="'+element['link']+'" target="blank">Link</a>';
                 element['link'] = href;
+                // var dt = new Date(element['insert_date'])
+                // element['insert_date'] = dt;
+                // const [d,m, y] = [dt.getMonth(), dt.getDate(), dt.getFullYear()];
+                // element['insert_date'] = 
+                var arr = element['insert_date'].split(" ");
+                element['insert_date'] = arr[0];
             });
             var dtData = [];
             data.forEach(element => {
@@ -30,16 +36,21 @@ $(document).ready(function(){
                         "data": null,
                         "defaultContent": '<i class="fa fa-plus-circle"></i>'
                     },
-                    {"width": '200px'},
+                    {"width": "50%"},
                     null,
-                    null,
+                    {"width": "50%"},
                     null,
                     null,
                     null,
                     null,
                     null,
                 ],
-                // fixedColumns: true,
+                "columnDefs": [
+                    {
+                        "targets": "-1",
+                        "className": "dt-head-left"
+                    }
+                ],
                 "order":[[1, 'asc']],
                 "bFilter" : false,
                 "bLengthChange" : false,
@@ -73,6 +84,7 @@ $(document).ready(function(){
             };
 
             $('#datatable tbody').on('click', 'td.details-control', function(){
+                // should change the icon to -
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
 
