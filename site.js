@@ -1,4 +1,6 @@
 let data_url = 'data.csv';
+let login = "ndongamadu";
+let apikey = "8455400464363917ddc809006f11233053182deb";
 
 
 $(document).ready(function(){
@@ -9,12 +11,16 @@ $(document).ready(function(){
             d3.csv(data_url)
         ]).then(function(d){
             data = d[0];
-
+            data.forEach(element => {
+                var href = '<a href="'+element['link']+'" target="blank">Link</a>';
+                element['link'] = href;
+            });
             var dtData = [];
             data.forEach(element => {
                 dtData.push([element['source_id'],element['title'], element['organisation'],element['insert_date'],element['sample'], "count", element['publication_channel'], element['scale'], element['link']]);
             });
-            // console.log(dtData);
+           var tsturl = "https://ndongamadu.github.io/viz-cva-dashboard/";
+
             var table = $('#datatable').DataTable({
                 data : dtData,
                 "columns": [
@@ -92,7 +98,6 @@ $(document).ready(function(){
         $('#keyFigs').html("");
 
     }
-
 
 
 })

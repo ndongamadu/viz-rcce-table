@@ -14,8 +14,9 @@ body {
     font-weight: 300;
 }
 
-table {
+table .display{
 	margin-bottom: 10px;
+    background-color: #fff;
 }
 
 table, th, td {
@@ -25,25 +26,33 @@ table, th, td {
  	padding: 10px;
 }
 
-table th {
-	cursor: pointer;
-}
+
 
 table th i.fas {
 	display: inline;
     padding-left: 3px;
 }
 
+.fa, .fas {
+    color: green;
+    font-size: 16px;
+}
 table thead {
 	/* background-color: #D2D2D2; */
 	font-size: 14px;
     white-space: nowrap; 
+    text-align: left;
+    text-transform: uppercase;
     
 }
 
 table tbody {
 	font-size: 12px;
 	/* line-height: 14px; */
+}
+table tbody tr{
+	border-bottom: #ccc;
+    border-bottom: 1px;
 }
 
 table tbody tr:hover {
