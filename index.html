@@ -26,7 +26,7 @@
   </head>
 
   <body>
-      <div class="container">
+      <div class="fluid-container">
 
         <section>
             <div class="row">
@@ -63,27 +63,48 @@
 
         </section>
         <section>
-            <h2>Map</h2>
+            <!-- <h2>Map</h2> -->
         </section>
 
         <section>
-            <div class="row">
-                <table id="datatable" class="row-border" style="width:100%" cellspacing="10">
+            <div class="container">
+                <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
+                <label><strong>Filter by: </strong></label>
+                <label>
+                    <button type="button" class="btn btn-info" id="testButton1" value="all" >All</button>
+                </label>
+                <label>
+                    <button type="button" class="btn btn-info grp1" id="testButton" value="Information">Information</button>
+                </label>
+                <label>
+                    <button type="button" class="btn btn-info grp1" id="testButton1" value="Knowledge">Knowledge</button>
+                </label>
+                <label>
+                    <button type="button" class="btn btn-info grp1" id="testButton" value="Perception">Perception</button>
+                </label>
+                <label>
+                    <button type="button" class="btn btn-info grp1" id="testButton" value="Practice">Practice</button>
+                </label>
+                <label>
+                    <button type="button" class="btn btn-info grp2" id="testButton" value="Structural factor">Structural factor</button>
+                </label>
+                <label>
+                    <button type="button" class="btn btn-info grp2" id="testButton" value="Social environment">Social environment</button>
+                </label>
+            </div>
+                <table id="datatable" class="row-border" style="width:100%">
                     <thead>
                       <tr>
                           <th></th>
                           <th>Title</th>
                           <th>Organization</th>
+                          <th>Dimension (Tag)</th>
+                          <th>Countries (Nb countries)</th>
                           <th>Date</th>
-                          <th>Sample Size</th>
-                          <th>Country Count</th>
-                          <th>Publication channel</th>
-                          <th>Dimension</th>
-                          <th>Link</th>
+                          <th>Location (Publication channel) <i class="fa fa-download" aria-hidden="true"></i></th>
                       </tr>
                     </thead>
                 </table>
-            </div>
         </section>
       </div>
     <script type='text/javascript' src='site.js'></script>

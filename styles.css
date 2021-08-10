@@ -1,8 +1,14 @@
 
 body {
     font-weight: 300;
+    color: #000;
+    padding-left: 20px;
+    padding-right: 20px
 }
 
+section {
+    padding-bottom: 20px;
+}
 .description {
     padding-left: 15px;
     padding-right: 15px;
@@ -12,44 +18,97 @@ body {
     font-size: 14px;
     font-weight: 300;
 }
-
-.fa, .fas {
+#searchBox {
+    min-width: 250px;
+    padding-right: 20px;
+}
+.fa{
     color: green;
     font-size: 16px;
+    text-align: right;
 }
+.fa-download {
+    color: #000;
+    font-size: 16px;
+}
+
 #datatable thead {
 	/* background-color: #D2D2D2; */
 	font-size: 14px;
-    white-space: nowrap; 
-    text-transform: uppercase;
+    /* white-space: normal;  */
+    /* text-transform: uppercase; */
+    border-bottom: blue;
     
 }
 
 
 #datatable tbody {
-	font-size: 14px;
+	font-size: 15px;
     white-space: pre-wrap;
 	line-height: 14px;
     text-align: left;
-    font-weight: 300;
+    font-weight: 350;
+    padding: 10px 0 10px 0;
 }
 
 #datatable > tbody > tr:hover {
-	background-color: rgb(250, 247, 247);
+	/* background-color: rgb(250, 247, 247); */
+    background-color: #f5f5f5;
 }
-/* 
-.tabDetail > tbody > tr:hover {
-	background-color:red;
-} */
+
+/* #datatable th, td {
+    padding: 35px;
+  } */
+
 
 #datatable, td h6 {
     font-size: 12px;
     font-weight: bold;
 }
 
-.tabDetail > tbody > tr{
-    background-color: #A3CDD9;
+/* #datatable tbody tr{
+    padding-top: 40px; 
+    padding-bottom: 40px;
 }
+
+#datatable tbody td{
+    padding-top: 0; 
+    padding-bottom: 0;
+} */
+.details-control {
+    padding-top: 0;
+    border: none;
+}
+
+.tabDetail {
+    border: none;
+    border-spacing: 0;
+    border-collapse: collapse;
+    background-color: #f5f5f5;
+    width: 100%;
+  }
+
+.tabDetail tbody {
+	font-size: 14px;
+    white-space: pre-wrap;
+	/* line-height: 12px; */
+    text-align: left;
+    font-weight: 300;
+    padding: 10px 0 10px 0;
+}
+
+table.tabDetail tbody tr{
+    background-color: #f5f5f5;
+    border: none;
+    padding: 0; 
+    margin: 0;
+}
+
+
+/* .tabDetail > tbody > tr {
+	/* background-color: rgb(250, 247, 247);
+    background-color: #ccc;
+} */
 
 .kf-content {
 	border: 1px solid #e6e7e8;
@@ -85,4 +144,16 @@ body {
 }
 .inner {
     font-size: 13px;
+}
+
+.btn {
+    background-color: #2f9c67;
+}
+.tag {
+    background-color: #2f9c67;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #fff;
 }

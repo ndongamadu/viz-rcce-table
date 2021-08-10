@@ -1,102 +1,186 @@
 let data_url = 'data.csv';
-let login = "ndongamadu";
-let apikey = "8455400464363917ddc809006f11233053182deb";
+let countriesArr = [],
+    tagsArr = [];
 
 
 $(document).ready(function(){
-    var data ;
+    var data_all ;
 
     function getData(){
         Promise.all([
             d3.csv(data_url)
         ]).then(function(d){
-            data = d[0];
-            data.forEach(element => {
-                var href = '<a href="'+element['link']+'" target="blank">Link</a>';
-                element['link'] = href;
-                // var dt = new Date(element['insert_date'])
-                // element['insert_date'] = dt;
-                // const [d,m, y] = [dt.getMonth(), dt.getDate(), dt.getFullYear()];
-                // element['insert_date'] = 
+            data_all = d[0]; 
+            // console.log(data);
+            data_all.forEach(element => {
+                // var href = '<a href="'+element['link']+'" target="blank">Link</a>';
+                // element['link'] = href; 
+                var arr = element['dimension'].split(",");
+                var trimedArr = arr.map(x => x.trim());
+                var formatedDims = [];
+                trimedArr.forEach(d => {
+                    formatedDims.push('<label class="alert tag">'+d+'</label>');
+                });
+                element['formattedDimension'] = formatedDims;
                 var arr = element['insert_date'].split(" ");
                 element['insert_date'] = arr[0];
             });
-            var dtData = [];
-            data.forEach(element => {
-                dtData.push([element['source_id'],element['title'], element['organisation'],element['insert_date'],element['sample'], "count", element['publication_channel'], element['scale'], element['link']]);
+            console.log(d[0]);
+            console.log(data_all);
+            d[0].forEach(element => {
+                var pays = element['countries'].split(",");
+                var dims = element['dimension'].split(",");
+                pays.forEach(p => {
+                    countriesArr.includes(p.trim()) ? '' : countriesArr.push(p.trim());
+                });
+                dims.forEach(d => {
+                    tagsArr.includes(d.trim()) ? '' : tagsArr.push(d.trim());
+                });
             });
-           var tsturl = "https://ndongamadu.github.io/viz-cva-dashboard/";
-
-            var table = $('#datatable').DataTable({
+            // console.log("countries: " + countriesArr);
+            // console.log("tags: " + tagsArr);
+            var dtData = [];
+            data_all.forEach(element => {
+                dtData.push([element['source_id'],element['title'], element['organisation'],element['formattedDimension'], element['country_count'],element['insert_date'], element['publication_channel']]);
+            });
+            console.log(dtData);
+            var datatable = $('#datatable').DataTable({
                 data : dtData,
                 "columns": [
                     {
                         "className": 'details-control',
                         "orderable": false,
                         "data": null,
-                        "defaultContent": '<i class="fa fa-plus-circle"></i>'
+                        "defaultContent": '<i class="fa fa-plus-circle"></i>',
+                        "width": "5%"
                     },
-                    {"width": "50%"},
-                    null,
-                    {"width": "50%"},
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    {"width": "25%"},
+                    {"width": "15%"},
+                    {"width": "25%"},
+                    {"width": "15%"},
+                    {"width": "10%"},
+                    {"width": "5%"}
                 ],
                 "columnDefs": [
                     {
-                        "targets": "-1",
-                        "className": "dt-head-left"
+                        "className": "dt-head-left",
+                        "targets": "_all"
                     }
                 ],
+                "scrollY": "600px", 
+                "scrollCollapse": true,
+                "paging": false,
                 "order":[[1, 'asc']],
-                "bFilter" : false,
-                "bLengthChange" : false,
-                "pageLength": 20,
-                dom: 'Bfrtip'
+                "dom": "lrtp",
+                // "createdRow": function( row, data, dataIndex ) {
+                //     // $(row).addClass('bgCol');
+                //     // $('td', row).css({
+                //     //     'border': '1px solid #ccc'
+                //     //   }); 
+                // }
+            
+            });
+
+
+            $('#searchInput').keyup(function () {
+                datatable.search($('#searchInput').val()).draw();
             });
 
             function format(arr){
-                filtered = data.filter(function(d){ return d['source_id']==arr[0 ]});
-                console.log(filtered);
-                return '<table cellpadding="5" cellspacing="10" class="tabDetail">'+
-                 '<tr>'+
-                    '<td>&nbsp;</td>'+
-                    '<td>&nbsp;</td>'+
-                    '<td>&nbsp;</td>'+
-                    '<td colspan="5">'+
-                        '<div class="inner"><h6>Authors</h6>'+filtered[0]['authors']+'</div>'+
-                        '<div class="inner"><h6>Details</h6>'+filtered[0]['details']+'</div>'+
-                        '<div class="inner"><h6>Methodology</h6>'+filtered[0]['methodology']+'</div>'+
-                        '<div class="inner"><h6>Sample Type</h6>'+filtered[0]['sample type']+'</div>'+
-                        '<div class="inner"><h6>Quality Check</h6>'+filtered[0]['quality_check']+'</div>'+
-                        '<div class="inner"><h6>Target Population</h6>'+filtered[0]['access_type']+'</div>'+
-                        '<div class="inner"><h6>Source Comment</h6>'+filtered[0]['source_comment']+'</div>'+
-                        '<div class="inner"><h6>Indicators</h6>'+filtered[0]['access_type']+'</div>'+
-                        '<div class="inner"><h6>Countries</h6>'+filtered[0]['access_type']+'</div>'+
-                        '<div class="inner"><h6>Region</h6>'+filtered[0]['access_type']+'</div>'+
-                    '</td>'+
-                '</tr>'+
-                '</table>';
+                filtered = data_all.filter(function(d){ return d['source_id']==arr[0 ]});
+                return '<table  class="tabDetail" >'+
+                         '<tr>'+
+                            '<td>&nbsp;</td>'+
+                            '<td>&nbsp;</td>'+
+                            '<td>&nbsp;</td>'+
+                            '<td>'+
+                                '<table class="tabDetail" >'+
+                                    '<tr>'+
+                                        '<th rowspan="2"><strong>Geo</strong></th>'+
+                                        '<td>Region</td>'+
+                                        '<td>'+filtered[0]['region']+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td>Countries ('+filtered[0]['country_count']+')</td>'+
+                                        '<td>'+filtered[0]['countries']+'</td>'+
+                                    '</tr>'+
+                                
+                                    '<tr>'+
+                                        '<th rowspan="3"><strong>Purpose</strong></th>'+
+                                        '<td>Summary</td>'+
+                                        '<td>'+filtered[0]['details']+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td>Indicators</td>'+
+                                        '<td>'+filtered[0]['variables']+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td>Target</td>'+
+                                        '<td>'+filtered[0]['target_pop']+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<th rowspan="4"><strong>Method</strong></th>'+
+                                        '<td>Survey</td>'+
+                                        '<td>'+filtered[0]['methodology']+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td>Sample</td>'+
+                                        '<td>'+filtered[0]['sample_type']+'</td>'+
+                                        '<td>'+filtered[0]['sample_size']+' respondents</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td>Review</td>'+
+                                        '<td>'+filtered[0]['quality_check']+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td>Comment</td>'+
+                                        '<td>'+filtered[0]['source_comment']+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<th rowspan="2"><strong>Source</strong></th>'+
+                                        '<td>Data Type</td>'+
+                                        '<td>'+filtered[0]['access_type']+'</td>'+
+                                        '<td>'+filtered[0]['publication_channel']+ ' (<a href="'+filtered[0]['link']+'" target="blank">link</a>)</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td>Authors</td>'+
+                                        '<td>'+filtered[0]['authors']+'</td>'+
+                                    '</tr>'+
+                                
+                                '</table>'+
+
+                            '</td>'+
+                            '<td>&nbsp;</td>'+
+                        '</tr>'+
+                        '</table>'
 
             };
 
             $('#datatable tbody').on('click', 'td.details-control', function(){
                 // should change the icon to -
                 var tr = $(this).closest('tr');
-                var row = table.row(tr);
+                var row = datatable.row(tr);
+                // var td =  $(this).closest('tr')//row.find("td:nth-child(1)");
 
                 if(row.child.isShown()){
                     row.child.hide();
                     tr.removeClass('shown');
+                    tr.css('background-color', '#fff');
+                    // console.log(row);
                 }
                 else {
                     row.child(format(row.data())).show();
                     tr.addClass('shown');
+                    // console.log(row);
+                    tr.css('background-color', '#f5f5f5');
+                    tr.css('padding-bottom', '0');
+                    // tr.css('border', 'none');
+                    // td.css('padding-top', '0');
+                    // tr.css('margin', '0');
                 }
             });
+
+
         
             // generateKeyFigures();
         })
@@ -106,10 +190,53 @@ $(document).ready(function(){
 
     getData();
 
+    function updateTable(dataArg){
+        var arr = (dataArg == undefined ? data_all : dataArg);
+        var dt = [];
+        arr.forEach(element => {
+            dt.push([element['source_id'],element['title'], element['organisation'],element['formattedDimension'], element['country_count'],element['insert_date'], element['publication_channel']]);
+        });
+        $('#datatable').dataTable().fnClearTable();
+        $('#datatable').dataTable().fnAddData(dt);
+    }
+
     function generateKeyFigures(){
         $('#keyFigs').html("");
 
     }
+
+    function createButtons(){
+        var html = "";
+        for (let tagsArr = 0; tagsArr < array.length; tagsArr++) {
+            const element = array[tagsArr];
+            
+        }
+        $('#container').append(html);
+    }
+
+    var buttons = document.getElementsByClassName("btn-info");
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", clickButton);
+    }
+
+    function clickButton() {
+        var val = this.value;
+        // $(this).removeClass('active');
+
+        if (val == "all") {
+            updateTable();
+        } else {
+            var filter = data_all.filter(function(d) {
+                var arr = d['dimension'].split(",");
+                var trimedArr = arr.map(x => x.trim());
+                return (trimedArr.includes(val) ? d : null);
+            })
+            updateTable(filter);
+        }
+
+        
+    }
+
 
 
 })
