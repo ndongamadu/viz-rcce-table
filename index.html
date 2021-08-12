@@ -66,42 +66,54 @@
             <!-- <h2>Map</h2> -->
         </section>
 
-        <section>
-            <div class="container">
-                <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
-                <label><strong>Filter by: </strong></label>
-                <label>
-                    <button type="button" class="btn btn-info" id="testButton1" value="all" >All</button>
-                </label>
-                <label>
-                    <button type="button" class="btn btn-info grp1" id="testButton" value="Information">Information</button>
-                </label>
-                <label>
-                    <button type="button" class="btn btn-info grp1" id="testButton1" value="Knowledge">Knowledge</button>
-                </label>
-                <label>
-                    <button type="button" class="btn btn-info grp1" id="testButton" value="Perception">Perception</button>
-                </label>
-                <label>
-                    <button type="button" class="btn btn-info grp1" id="testButton" value="Practice">Practice</button>
-                </label>
-                <label>
-                    <button type="button" class="btn btn-info grp2" id="testButton" value="Structural factor">Structural factor</button>
-                </label>
-                <label>
-                    <button type="button" class="btn btn-info grp2" id="testButton" value="Social environment">Social environment</button>
-                </label>
+        <section >
+            <div class="filters">
+                <!-- <div class="center-block"> -->
+                    <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
+                    <label><strong>Filter by: </strong></label>
+                    <label>
+                        <button type="button" class="btn btn-info all" id="testButton1" value="all" >All</button>
+                    </label>
+                    <label>
+                        <button type="button" class="btn btn-info main" id="testButton" value="Information">Information</button>
+                    </label>
+                    <label>
+                        <button type="button" class="btn btn-info main" id="testButton1" value="Knowledge">Knowledge</button>
+                    </label>
+                    <label>
+                        <button type="button" class="btn btn-info main" id="testButton" value="Perception">Perception</button>
+                    </label>
+                    <label>
+                        <button type="button" class="btn btn-info main" id="testButton" value="Practice">Practice</button>
+                    </label>
+                    <label>
+                        <button type="button" class="btn btn-info alt" id="testButton" value="Structural factor">Structural factor</button>
+                    </label>
+                    <label>
+                        <button type="button" class="btn btn-info alt" id="testButton" value="Social environment">Social environment</button>
+                    </label>
+                    
+                    <span class="select">
+                        <label for="regionSelect"><strong>Region</strong></label>
+                        <select id="regionSelect"></select>
+                    </span>
+
+                    <!-- </div> -->
+                <!-- </div> -->
             </div>
+        </section>
+
+        <section>
                 <table id="datatable" class="row-border" style="width:100%">
                     <thead>
                       <tr>
                           <th></th>
-                          <th>Title</th>
-                          <th>Organization</th>
-                          <th>Dimension (Tag)</th>
-                          <th>Countries (Nb countries)</th>
+                          <th>Study</th>
+                          <th>Behavioural Dimension</th>
+                          <th>Region</th>
                           <th>Date</th>
-                          <th>Location (Publication channel) <i class="fa fa-download" aria-hidden="true"></i></th>
+                          <th>Organization</th>
+                          <th><i class="fa fa-download fa-lg" aria-hidden="true"></i></th>
                       </tr>
                     </thead>
                 </table>
