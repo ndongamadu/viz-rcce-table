@@ -1,9 +1,15 @@
 let data_url = 'data.csv';
 let countriesArr = [],
-    regionsArr = ['All'],
+    regionsArr = [],
     tagsArr = [];
 let mainTags = ["Information","Knowledge","Perception","Practice"];
 let altTags = ["Social environment", "Structural factor"];
+
+let new_studies = 0;
+let comparisonDate_start = new Date();
+let comparisonDate_end = new Date();
+comparisonDate_start.setMonth(comparisonDate_end.getMonth() - 2);
+comparisonDate_start.setDate(1);
 
 $(document).ready(function(){
     var data_all ;
@@ -23,8 +29,9 @@ $(document).ready(function(){
                     mainTags.includes(d) ? formatedDims +='<label class="alert tag-main">'+d+'</label>' : formatedDims +='<label class="alert tag-alt">'+d+'</label>';
                 });
                 element['formattedDimension'] = formatedDims;
-                var arr = element['insert_date'].split(" ");
-                element['insert_date'] = arr[0];
+                var arr = new Date(element['source_date']);//element['source_date'].split(" ");
+                element['date'] = Intl.DateTimeFormat().format(arr)//arr.toDateString();
+                arr <= comparisonDate_end && arr >= comparisonDate_start ? new_studies +=new_studies : null; 
             });
             console.log(data_all);
 
@@ -45,14 +52,25 @@ $(document).ready(function(){
 
             // 
             generateRegionSelect();
+            generateKeyFigures();
 
             // console.log("countries: " + countriesArr);
             // console.log("regions: " + regionsArr);
             var dtData = [];
             data_all.forEach(element => {
-                dtData.push([element['source_id'],element['title'],element['formattedDimension'], element['region'],element['source_date'], element['organisation'],element['publication_channel']]);
+                dtData.push([element['source_id'],element['title'],
+                                element['formattedDimension'], 
+                                element['region'],
+                                element['date'], 
+                                element['organisation'],
+                                '<a href="'+element['link']+'" target="blank"><i class="fa fa-download fa-sm"></i></a>',
+                                //hidden
+                                element['details'],element['authors'],element['countries'],
+                                element['variables'],element['source_comment'],element['methodology'],
+                                element['target_pop'], element['sample_type'],element['quality_check']
+                            ]);
             });
-            console.log(dtData);
+            // console.log(dtData);
             var datatable = $('#datatable').DataTable({
                 data : dtData,
                 "columns": [
@@ -61,20 +79,23 @@ $(document).ready(function(){
                         "orderable": false,
                         "data": null,
                         "defaultContent": '<i class="fa fa-plus-circle"></i>',
-                        "width": "5%"
+                        "width": "1%"
                     },
                     {"width": "25%"},
                     {"width": "15%"},
                     {"width": "15%"},
                     {"width": "5%"},
                     {"width": "10%"},
-                    {"width": "5%"}
+                    {"width": "1%"}
                 ],
                 "columnDefs": [
                     {
                         "className": "dt-head-left",
                         "targets": "_all"
                     },
+                    {"targets": [7], "visible": false},{"targets": [8], "visible": false},{"targets": [9], "visible": false},
+                    {"targets": [10], "visible": false},{"targets": [11], "visible": false},{"targets": [12], "visible": false},
+                    {"targets": [13], "visible": false},{"targets": [14], "visible": false},{"targets": [15], "visible": false},
                     { "searchable" : true, "targets": "_all"}
                 ],
                 // "scrollY": "600px", 
@@ -105,7 +126,7 @@ $(document).ready(function(){
                          '<tr>'+
                             '<td>&nbsp;</td>'+
                             '<td>&nbsp;</td>'+
-                            '<td>&nbsp;</td>'+
+                            '<td>&nbsp;</td>'+'<td>&nbsp;</td>'+
                             '<td>'+
                                 '<table class="tabDetail" >'+
                                     '<tr>'+
@@ -172,8 +193,8 @@ $(document).ready(function(){
                                     '<tr>'+
                                         '<td>&nbsp;</td>'+
                                         '<td>Publication</td>'+
-                                        '<td><a href="'+filtered[0]['link']+'" target="blank"><i class="fa fa-download fa-sm"></i></a></td>'+
-                                        // '<td>'+filtered[0]['publication_channel']+'<a href="'+filtered[0]['link']+'" target="blank"><i class="fa fa-download fa-sm"></i></a></td>'+
+                                        // '<td><a href="'+filtered[0]['link']+'" target="blank"><i class="fa fa-download fa-sm"></i></a></td>'+
+                                        '<td>'+filtered[0]['publication_channel']+'</td>'+
                                     '</tr>'+
                                 
                                 '</table>'+
@@ -199,6 +220,7 @@ $(document).ready(function(){
                 }
                 else {
                     row.child(format(row.data())).show();
+
                     tr.addClass('shown');
                     // console.log(row);
                     tr.css('background-color', '#f5f5f5');
@@ -206,7 +228,10 @@ $(document).ready(function(){
                     // tr.css('border', 'none');
                     // td.css('padding-top', '0');
                     // tr.css('margin', '0');
+
                 }
+                // var rowUp=document.getElementByClassName("shown");
+                // var nextRow = rowUp.parentNode.rows[ rowUp.rowIndex + 1 ];
             });
 
 
@@ -223,24 +248,37 @@ $(document).ready(function(){
         var arr = (dataArg == undefined ? data_all : dataArg);
         var dt = [];
         arr.forEach(element => {
-            dt.push([element['source_id'],element['title'],element['formattedDimension'], element['region'],element['source_date'], element['organisation'],element['publication_channel']]);
+            dt.push([element['source_id'],element['title'],
+                element['formattedDimension'],
+                element['region'],
+                element['date'],
+                element['organisation'],
+                '<a href="'+element['link']+'" target="blank"><i class="fa fa-download fa-sm"></i></a>',
+                //hidden
+                element['details'],element['authors'],element['countries'],
+                element['variables'],element['source_comment'],element['methodology'],
+                element['target_pop'], element['sample_type'],element['quality_check']
+            ]);
         });
         $('#datatable').dataTable().fnClearTable();
         $('#datatable').dataTable().fnAddData(dt);
     }
 
     function generateKeyFigures(){
-        $('#keyFigs').html("");
-
+        console.log(comparisonDate_end);
+        console.log(comparisonDate_start);
+        console.log(comparisonDate_start < comparisonDate_end);
+        $('#studies h2').text(data_all.length);
+        $('#countries h2').text(countriesArr.length);
+        $('#new_studies h2').text(new_studies);
     }
 
     function generateRegionSelect(){
         var options = '';
         for (let i = 0; i < regionsArr.length; i++) {
-        i == 0 ? options += '<option value="' + regionsArr[i] + '" selected>' + regionsArr[i] + '</option>' :
             options += '<option value="' + regionsArr[i] + '">' + regionsArr[i] + '</option>';
         }
-        $('#regionSelect').html(options);
+        $('#regionSelect').append(options);
     } //generateRegionSelect
 
     function createButtons(){
@@ -252,41 +290,58 @@ $(document).ready(function(){
         $('#container').append(html);
     }
 
-    var buttons = document.getElementsByClassName("btn-info");
+    var buttons = document.getElementsByClassName("btn");
     for (var i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener("click", clickButton);
     }
 
-    function clickButton() {
+    function clickButton() {    
+        $('.btn').removeClass('active');
+        
         var val = this.value;
-        // $(this).removeClass('active');
+        var regionSelected = $('#regionSelect').val();
 
         if (val == "all") {
-            updateTable();
+            regionSelected == 'all' ? updateTable() : $('#regionSelect').trigger('change');
         } else {
             var filter = data_all.filter(function(d) {
                 var arr = d['dimension'].split(",");
+                var regArr = d['region'].split(",");
+                var trimedTagArr = arr.map(x => x.trim());
+                var trimedRegArr = regArr.map(x => x.trim());
                 var trimedArr = arr.map(x => x.trim());
-                return (trimedArr.includes(val) ? d : null);
+                regionSelected == 'all' ? trimedRegArr = "all" : null;
+                return ( trimedTagArr.includes(val) && trimedRegArr.includes(regionSelected)) ? d : null;
             })
             updateTable(filter);
         }
+
+        $(this).toggleClass('active');
         
     } //clickButton
 
     $('#regionSelect').on('change', function(){
+        var tagsFilter = 'all';
+        for (var i = 0; i < buttons.length; i++) {
+            if ($(buttons[i]).hasClass('active')) {
+                tagsFilter = $(buttons[i]).val();
+            }
+            
+        }
+        // console.log("tag filtered: " +tagsFilter);
         var regionSelected = $('#regionSelect').val();
-        console.log("region selected: " +regionSelected);
 
-        if (regionSelected == "All") {
-            updateTable();
+        if (regionSelected == "all") {
+            tagsFilter == 'all' ? updateTable() : $('.active').trigger('click');
         } else {
-            var filter = data_all.filter(function(d) {
-                var arr = d['region'].split(",");
-                var trimedArr = arr.map(x => x.trim());
-                return (trimedArr.includes(regionSelected) ? d : null);
+                var filter = data_all.filter(function(d) {
+                var arr = d['dimension'].split(",");
+                var regArr = d['region'].split(",");
+                var trimedTagArr = arr.map(x => x.trim());
+                var trimedRegArr = regArr.map(x => x.trim());
+                tagsFilter == 'all' ? trimedTagArr = "all" : null; //this for the condition to be always true
+                return (trimedRegArr.includes(regionSelected) && trimedTagArr.includes(tagsFilter) ) ? d : null;
             });
-
             updateTable(filter);
         }
 

@@ -31,26 +31,22 @@
         <section>
             <div class="row">
 
-                <div class="col-md-3">
-                    <div class="kf-header"><h2>123</h2></div>
-                    <div class="kf-content"><h5>Number of countries with data last 3 months</h5></div>
+                <div class="col-md-4">
+                    <div class="kf-header" id="studies"><h2></h2></div>
+                    <div class="kf-content"><h5>Number of Studies</h5></div>
                 </div>
-                <div class="col-md-3">
-                    <div class="kf-header"><h2>123</h2></div>
-                    <div class="kf-content"><h5>Number of indicators with data last 3 months</h5></div>
+                <div class="col-md-4">
+                    <div class="kf-header" id="countries"><h2></h2></div>
+                    <div class="kf-content"><h5>Number of countries and territories</h5></div>
                 </div>
-                <div class="col-md-3">
-                    <div class="kf-header"><h2>123</h2></div>
-                    <div class="kf-content"><h5>Number of sources</h5></div>
+                <div class="col-md-4">
+                    <div class="kf-header" id="new_studies"><h2></h2></div>
+                    <div class="kf-content"><h5>New studies in the last 2 months</h5></div>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="kf-header"><h2>123</h2></div>
-                    <div class="kf-content"><h5>Average of coverage</h5></div>
-                </div>
             </div>
         </section>
-        <section>
+        <!-- <section>
             <div class="row">
                 <div class="description">
                     <h6>
@@ -61,7 +57,7 @@
 
             </div>
 
-        </section>
+        </section> -->
         <section>
             <!-- <h2>Map</h2> -->
         </section>
@@ -72,30 +68,30 @@
                     <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
                     <label><strong>Filter by: </strong></label>
                     <label>
-                        <button type="button" class="btn btn-info all" id="testButton1" value="all" >All</button>
+                        <button type="button" class="btn active all" id="testButton1" value="all" >All</button>
                     </label>
                     <label>
-                        <button type="button" class="btn btn-info main" id="testButton" value="Information">Information</button>
+                        <button type="button" class="btn main" id="testButton" value="Information">Information</button>
                     </label>
                     <label>
-                        <button type="button" class="btn btn-info main" id="testButton1" value="Knowledge">Knowledge</button>
+                        <button type="button" class="btn main" id="testButton1" value="Knowledge">Knowledge</button>
                     </label>
                     <label>
-                        <button type="button" class="btn btn-info main" id="testButton" value="Perception">Perception</button>
+                        <button type="button" class="btn main" id="testButton" value="Perception">Perception</button>
                     </label>
                     <label>
-                        <button type="button" class="btn btn-info main" id="testButton" value="Practice">Practice</button>
+                        <button type="button" class="btn main" id="testButton" value="Practice">Practice</button>
                     </label>
                     <label>
-                        <button type="button" class="btn btn-info alt" id="testButton" value="Structural factor">Structural factor</button>
+                        <button type="button" class="btn alt" id="testButton" value="Structural factor">Structural factor</button>
                     </label>
                     <label>
-                        <button type="button" class="btn btn-info alt" id="testButton" value="Social environment">Social environment</button>
+                        <button type="button" class="btn alt" id="testButton" value="Social environment">Social environment</button>
                     </label>
                     
                     <span class="select">
                         <label for="regionSelect"><strong>Region</strong></label>
-                        <select id="regionSelect"></select>
+                        <select id="regionSelect"><option value="all" selected>All</option></select>
                     </span>
 
                     <!-- </div> -->
@@ -113,7 +109,10 @@
                           <th>Region</th>
                           <th>Date</th>
                           <th>Organization</th>
-                          <th><i class="fa fa-download fa-lg" aria-hidden="true"></i></th>
+                          <th>Link</th>
+                          <th></th><th></th><th></th>
+                          <th></th><th></th><th></th>
+                          <th></th><th></th><th></th>
                       </tr>
                     </thead>
                 </table>
