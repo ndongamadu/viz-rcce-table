@@ -1,4 +1,7 @@
 let data_url = 'data.csv';
+let geoDataUrl = 'world.json';
+let geomData;
+
 let countriesArr = [],
     regionsArr = [],
     tagsArr = [];
@@ -11,14 +14,22 @@ let comparisonDate_end = new Date();
 comparisonDate_start.setMonth(comparisonDate_end.getMonth() - 2);
 comparisonDate_start.setDate(1);
 
+let mapFillColor = '#9EC8AE', 
+    mapInactive = '#C2C4C6',
+    mapActive = '#2F9C67',
+    hoverColor = '#78B794';
+
 $(document).ready(function(){
     var data_all ;
 
     function getData(){
         Promise.all([
-            d3.csv(data_url)
+            d3.csv(data_url),
+            d3.json(geoDataUrl)
         ]).then(function(d){
             data_all = d[0]; 
+            geomData = topojson.feature(d[1], d[1].objects.world);
+            console.log(geomData);
             data_all.forEach(element => {
                 // var href = '<a href="'+element['link']+'" target="blank">Link</a>';
                 // element['link'] = href; 
@@ -33,7 +44,6 @@ $(document).ready(function(){
                 element['date'] = Intl.DateTimeFormat().format(arr)//arr.toDateString();
                 arr <= comparisonDate_end && arr >= comparisonDate_start ? new_studies +=new_studies : null; 
             });
-            console.log(data_all);
 
             d[0].forEach(element => {
                 var pays = element['countries'].split(",");
@@ -53,6 +63,7 @@ $(document).ready(function(){
             // 
             generateRegionSelect();
             generateKeyFigures();
+            initiateMap();
 
             // console.log("countries: " + countriesArr);
             // console.log("regions: " + regionsArr);
@@ -265,13 +276,10 @@ $(document).ready(function(){
     }
 
     function generateKeyFigures(){
-        console.log(comparisonDate_end);
-        console.log(comparisonDate_start);
-        console.log(comparisonDate_start < comparisonDate_end);
         $('#studies h2').text(data_all.length);
         $('#countries h2').text(countriesArr.length);
         $('#new_studies h2').text(new_studies);
-    }
+    } //generateKeyFigures
 
     function generateRegionSelect(){
         var options = '';
@@ -346,6 +354,91 @@ $(document).ready(function(){
         }
 
     });
+
+    function initiateMap() {
+        console.log(countriesArr);
+        var width = $('#map').width();
+        var height = 450;
+        var mapScale = width/7.2;
+        var mapCenter = [25, 8];
+    
+        projection = d3.geoMercator()
+          .center(mapCenter)
+          .scale(mapScale)
+          .translate([width / 2, height / 2]);
+    
+        var path = d3.geoPath().projection(projection);
+    
+        mapsvg = d3.select('#map').append("svg")
+            .attr("width", width)
+            .attr("height", height);
+    
+    
+        var g = mapsvg.append("g").attr('id', 'admin')
+              .selectAll("path")
+              .data(geomData.features)
+              .enter()
+                .append("path")
+                .attr('d',path)
+                .attr('id', function(d){ 
+                    return d.properties.ISO_A3; 
+                })
+                .attr('class', function(d){
+                    var className = (countriesArr.includes(d.properties.ADMIN)) ? 'hasStudy' : 'inactive';
+                    return className;
+                })
+                .attr('fill', function(d){
+                    return countriesArr.includes(d.properties.ADMIN) ? mapFillColor : mapInactive ;
+                })
+                .attr('stroke-width', 1)
+                .attr('stroke', '#7d868d');
+                
+        //map tooltips
+        var maptip = d3.select('#map').append('div').attr('class', 'd3-tip map-tip hidden');
+        g.filter('.hasStudy')
+            .on('mousemove', function(d,i) {
+                
+                if (!$(this).data('selected')) {
+                    $(this).attr('fill', hoverColor);
+                }
+                var mouse = d3.mouse(mapsvg.node()).map( function(d) { return parseInt(d); } );
+                maptip
+                    .classed('hidden', false)
+                    .attr('style', 'left:'+(mouse[0])+'px; top:'+(mouse[1]+100)+'px')
+                    .html(d.properties.ADMIN)
+            })
+            .on('mouseout',  function(d,i) {
+                if (!$(this).data('selected')) {
+                    $(this).attr('fill', mapFillColor);
+                }
+                maptip.classed('hidden', true);
+            })
+            .on('click', function(d,i){
+                mapcountrySelected($(this), d.properties.ADMIN);
+            });
+    
+    
+      } //initiateMap
+
+      function mapcountrySelected(pays, name){
+        pays.siblings().data('selected', false);
+        pays.siblings('.hasStudy').attr('fill', mapFillColor);
+        pays.attr('fill', mapActive);
+        pays.data('selected', true);
+
+        var filter = data_all.filter(function(d) {
+            var arr = d['countries'].split(",");
+            var trimedPaysArr = arr.map(x => x.trim());
+            return (trimedPaysArr.includes(name)) ? d : null;
+        });
+        updateTable(filter);
+        //clear tag selection and region dropdown select to all
+        $('.btn').removeClass('active');
+        $('.all').toggleClass('active');
+        $('#regionSelect').val('all');
+
+
+      } //mapcountrySelected
 
 
 

@@ -191,7 +191,7 @@ table.tabDetail tbody tr{
     /* box-shadow: 5px 5px 5px 5px #ccc; */
     background-color: none;
     border-color: none; 
-    box-shadow: 0 0 0 0.2rem #7A7C7F;
+    box-shadow: 0 0 0 0.2rem #2F9C67;
     cursor: pointer;
 }
 /* .btn-info:not(:disabled):not(.disabled).active, 
@@ -229,7 +229,7 @@ table.tabDetail tbody tr{
 .main:focus, .main:active{
     background-color: #2F9C67;
     border-color: #2F9C67;
-    box-shadow: none;
+    box-shadow: 0 0 0 0.2rem #2F9C67;
 }
 .alt {
     background-color: #798BA5;
@@ -241,7 +241,7 @@ table.tabDetail tbody tr{
 .alt:focus {
     background-color: #204669;
     border-color: #204669;
-    box-shadow: none;
+    box-shadow: 0 0 0 0.2rem #2F9C67;;
 }
 
 .tag-main {
@@ -262,4 +262,40 @@ table.tabDetail tbody tr{
     padding-bottom: 5px;
     color: #fff;
     margin-right: 8px;
+}
+
+#map {
+    width: 100%;
+    /* background-color: #D4E5F7; */
+}
+
+#admin path {
+	cursor: pointer;
+}
+#admin path.inactive {
+	cursor: default;
+}
+
+.d3-tip {
+    padding: 10px;
+    background-color: #FFF;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border: 0px;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #000;
+    transition: 0.3s opacity ease;
+    z-index: 100;
+    pointer-events: none;
+
+}
+
+.map-tip{
+  position: absolute;
+}
+
+
+.hidden { 
+  display: none; 
 }
