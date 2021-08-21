@@ -17,8 +17,9 @@
       <script src="https://d3js.org/topojson.v1.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
-      <!-- <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>   -->
+      <script src="//cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>
       <script src="https://kit.fontawesome.com/39e5643f1a.js"></script>
       <script src="https://d3js.org/d3.v5.js"></script> 
       
@@ -26,10 +27,11 @@
 
   <body>
       <div class="fluid-container">
-
+        <section>
+            <div id="lastUpdate">Last update: <span></span></div>
+        </section>
         <section>
             <div class="row">
-
                 <div class="col-md-4">
                     <div class="kf-header" id="studies"><h2></h2></div>
                     <div class="kf-content"><h5>Number of Studies</h5></div>
@@ -68,25 +70,25 @@
                     <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
                     <label><strong>Filter by: </strong></label>
                     <label>
-                        <button type="button" class="btn active all" id="testButton1" value="all" >All</button>
+                        <button type="button" class="btn active all" id="tagAll" value="all" >All</button>
                     </label>
                     <label>
-                        <button type="button" class="btn main" id="testButton" value="Information">Information</button>
+                        <button type="button" class="btn main" id="tagInfo" value="Information">Information</button>
                     </label>
                     <label>
-                        <button type="button" class="btn main" id="testButton1" value="Knowledge">Knowledge</button>
+                        <button type="button" class="btn main" id="tagKnowledge" value="Knowledge">Knowledge</button>
                     </label>
                     <label>
-                        <button type="button" class="btn main" id="testButton" value="Perception">Perception</button>
+                        <button type="button" class="btn main" id="tagPerception" value="Perception">Perception</button>
                     </label>
                     <label>
-                        <button type="button" class="btn main" id="testButton" value="Practice">Practice</button>
+                        <button type="button" class="btn main" id="tagPractice" value="Practice">Practice</button>
                     </label>
                     <label>
-                        <button type="button" class="btn alt" id="testButton" value="Structural factor">Structural factor</button>
+                        <button type="button" class="btn alt" id="tagFactor" value="Structural factor">Structural factor</button>
                     </label>
                     <label>
-                        <button type="button" class="btn alt" id="testButton" value="Social environment">Social environment</button>
+                        <button type="button" class="btn alt" id="tagEnv" value="Social environment">Social environment</button>
                     </label>
                     
                     <span class="select">

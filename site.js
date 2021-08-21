@@ -11,13 +11,20 @@ let altTags = ["Social environment", "Structural factor"];
 let new_studies = 0;
 let comparisonDate_start = new Date();
 let comparisonDate_end = new Date();
+let latestUpdateDate,
+    latestUpdateDateArr = [];
 comparisonDate_start.setMonth(comparisonDate_end.getMonth() - 2);
 comparisonDate_start.setDate(1);
+
+let g,
+    mapsvg;
 
 let mapFillColor = '#9EC8AE', 
     mapInactive = '#C2C4C6',
     mapActive = '#2F9C67',
     hoverColor = '#78B794';
+
+let mapCountryClicked = 'all';
 
 $(document).ready(function(){
     var data_all ;
@@ -29,7 +36,6 @@ $(document).ready(function(){
         ]).then(function(d){
             data_all = d[0]; 
             geomData = topojson.feature(d[1], d[1].objects.world);
-            console.log(geomData);
             data_all.forEach(element => {
                 // var href = '<a href="'+element['link']+'" target="blank">Link</a>';
                 // element['link'] = href; 
@@ -40,10 +46,15 @@ $(document).ready(function(){
                     mainTags.includes(d) ? formatedDims +='<label class="alert tag-main">'+d+'</label>' : formatedDims +='<label class="alert tag-alt">'+d+'</label>';
                 });
                 element['formattedDimension'] = formatedDims;
+
                 var arr = new Date(element['source_date']);//element['source_date'].split(" ");
-                element['date'] = Intl.DateTimeFormat().format(arr)//arr.toDateString();
-                arr <= comparisonDate_end && arr >= comparisonDate_start ? new_studies +=new_studies : null; 
+                element['date'] = element['source_date'];
+
+                arr <= comparisonDate_end && arr >= comparisonDate_start ? new_studies +=1 : null; 
+                var updateDate = new Date(element['insert_date']);
+                latestUpdateDateArr.includes(updateDate) ? null : latestUpdateDateArr.push(updateDate);
             });
+            latestUpdateDate = d3.max(latestUpdateDateArr);
 
             d[0].forEach(element => {
                 var pays = element['countries'].split(",");
@@ -61,12 +72,11 @@ $(document).ready(function(){
             });
 
             // 
+            $('#lastUpdate span').text(latestUpdateDate.toDateString())
             generateRegionSelect();
             generateKeyFigures();
             initiateMap();
 
-            // console.log("countries: " + countriesArr);
-            // console.log("regions: " + regionsArr);
             var dtData = [];
             data_all.forEach(element => {
                 dtData.push([element['source_id'],element['title'],
@@ -82,6 +92,26 @@ $(document).ready(function(){
                             ]);
             });
             // console.log(dtData);
+            $.fn.dataTableExt.oSort["myDate-desc"] = function(x, y) {
+                var fX = new Date(x),
+                    fY = new Date(y);
+
+                    if (fX > fY) {
+                        return -1;
+                    }
+
+                    return 1;
+            };
+            $.fn.dataTableExt.oSort["myDate-asc"] = function(x, y) {
+                var fX = new Date(x),
+                    fY = new Date(y);
+                    
+                    if (fX > fY) {
+                        return 1;
+                    }
+
+                    return -1;
+            };
             var datatable = $('#datatable').DataTable({
                 data : dtData,
                 "columns": [
@@ -104,10 +134,15 @@ $(document).ready(function(){
                         "className": "dt-head-left",
                         "targets": "_all"
                     },
+                    {
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    },
                     {"targets": [7], "visible": false},{"targets": [8], "visible": false},{"targets": [9], "visible": false},
                     {"targets": [10], "visible": false},{"targets": [11], "visible": false},{"targets": [12], "visible": false},
                     {"targets": [13], "visible": false},{"targets": [14], "visible": false},{"targets": [15], "visible": false},
-                    { "searchable" : true, "targets": "_all"}
+                    { "searchable" : true, "targets": "_all"},
+                    {"type": "myDate","targets": 4}
                 ],
                 // "scrollY": "600px", 
                 // "scrollCollapse": true,
@@ -300,19 +335,60 @@ $(document).ready(function(){
 
     var buttons = document.getElementsByClassName("btn");
     for (var i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", clickButton);
+        d3.select('#'+buttons[i].id).append('div').attr('class', 'd3-tip tag-tip hidden');
+        buttons[i].addEventListener("click", clickButton);        
     }
+
+    $('.btn').mouseenter(function(){
+        var text = "Reset all filters";
+        this.id == "tagInfo" ? text = "Refers to ..." :
+        this.id == "tagKnowledge" ? text = "Refers to ..." :
+        this.id == "tagPerception" ? text = "Refers to ..." :
+        this.id == "tagPractice" ? text = "Refers to ..." :
+        this.id == "tagFactor" ? text = "Refers to ..." : 
+        this.id == "tagEnv" ? text = "Refers to ..." : null;
+
+        // var mouse = d3.mouse();
+        // console.log(mouse[0]);
+        d3.select('#'+this.id).selectAll('div')
+        .text(text)
+        .classed('hidden', false)
+        .attr('style', function(d){
+            console.log(d);
+        })
+    })
+    $('.btn').mouseleave(function(){
+        d3.select('#'+this.id).selectAll('div')
+        .classed('hidden', true);
+    })
+
 
     function clickButton() {    
         $('.btn').removeClass('active');
         
         var val = this.value;
         var regionSelected = $('#regionSelect').val();
+        var data = data_all;
+        if (mapCountryClicked != 'all') {
+            data = data.filter(function(item){
+                var arr = item['countries'].split(",");
+                var trimedArr = arr.map(x => x.trim());
+                return trimedArr.includes(mapCountryClicked) ? item : null;
+            })
+        }
 
         if (val == "all") {
-            regionSelected == 'all' ? updateTable() : $('#regionSelect').trigger('change');
+            updateTable();
+            regionSelected == 'all' ? null : $('#regionSelect').val('all');
+            mapCountryClicked = 'all';
+            // remove map filter too
+            mapsvg.selectAll('path').each(function(element, index){
+                if (d3.select(this).classed('clicked')) {
+                    d3.select(this).attr('fill', mapFillColor); 
+                }
+            });
         } else {
-            var filter = data_all.filter(function(d) {
+            var filter = data.filter(function(d) {
                 var arr = d['dimension'].split(",");
                 var regArr = d['region'].split(",");
                 var trimedTagArr = arr.map(x => x.trim());
@@ -330,19 +406,27 @@ $(document).ready(function(){
 
     $('#regionSelect').on('change', function(){
         var tagsFilter = 'all';
+        var data = data_all;
+        if (mapCountryClicked != 'all') {
+            data = data.filter(function(item){
+                var arr = item['countries'].split(",");
+                var trimedArr = arr.map(x => x.trim());
+                return trimedArr.includes(mapCountryClicked) ? item : null;
+            })
+        }
+
         for (var i = 0; i < buttons.length; i++) {
             if ($(buttons[i]).hasClass('active')) {
                 tagsFilter = $(buttons[i]).val();
             }
             
         }
-        // console.log("tag filtered: " +tagsFilter);
         var regionSelected = $('#regionSelect').val();
 
         if (regionSelected == "all") {
             tagsFilter == 'all' ? updateTable() : $('.active').trigger('click');
         } else {
-                var filter = data_all.filter(function(d) {
+                var filter = data.filter(function(d) {
                 var arr = d['dimension'].split(",");
                 var regArr = d['region'].split(",");
                 var trimedTagArr = arr.map(x => x.trim());
@@ -356,11 +440,10 @@ $(document).ready(function(){
     });
 
     function initiateMap() {
-        console.log(countriesArr);
         var width = $('#map').width();
-        var height = 450;
-        var mapScale = width/7.2;
-        var mapCenter = [25, 8];
+        var height = 550;
+        var mapScale = width/12;
+        var mapCenter = [25, 25];
     
         projection = d3.geoMercator()
           .center(mapCenter)
@@ -374,7 +457,7 @@ $(document).ready(function(){
             .attr("height", height);
     
     
-        var g = mapsvg.append("g").attr('id', 'admin')
+        g = mapsvg.append("g").attr('id', 'admin')
               .selectAll("path")
               .data(geomData.features)
               .enter()
@@ -390,15 +473,15 @@ $(document).ready(function(){
                 .attr('fill', function(d){
                     return countriesArr.includes(d.properties.ADMIN) ? mapFillColor : mapInactive ;
                 })
-                .attr('stroke-width', 1)
-                .attr('stroke', '#7d868d');
+                .attr('stroke-width', .2)
+                .attr('stroke', '#fff');
                 
         //map tooltips
         var maptip = d3.select('#map').append('div').attr('class', 'd3-tip map-tip hidden');
+
         g.filter('.hasStudy')
             .on('mousemove', function(d,i) {
-                
-                if (!$(this).data('selected')) {
+                if ( !$(this).hasClass('clicked')) {
                     $(this).attr('fill', hoverColor);
                 }
                 var mouse = d3.mouse(mapsvg.node()).map( function(d) { return parseInt(d); } );
@@ -408,23 +491,26 @@ $(document).ready(function(){
                     .html(d.properties.ADMIN)
             })
             .on('mouseout',  function(d,i) {
-                if (!$(this).data('selected')) {
+
+                if ( !$(this).hasClass('clicked')) {
                     $(this).attr('fill', mapFillColor);
                 }
                 maptip.classed('hidden', true);
             })
             .on('click', function(d,i){
-                mapcountrySelected($(this), d.properties.ADMIN);
+                mapCountryClicked = d.properties.ADMIN;
+                mapCountrySelected($(this), d.properties.ADMIN);
             });
     
     
       } //initiateMap
 
-      function mapcountrySelected(pays, name){
-        pays.siblings().data('selected', false);
+      function mapCountrySelected(pays, name){
+        pays.removeClass('clicked')
+
         pays.siblings('.hasStudy').attr('fill', mapFillColor);
         pays.attr('fill', mapActive);
-        pays.data('selected', true);
+        pays.addClass('clicked');
 
         var filter = data_all.filter(function(d) {
             var arr = d['countries'].split(",");
