@@ -1,4 +1,4 @@
-let data_url = 'data.csv';
+let data_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDTIju76FYADX9ZKbKBD1JBA7eFLv86Y8ltOTs24eLqrf3FnKJENmtcUkP1HUMCQq7JL9hgwofz0q/pub?gid=1612863274&single=true&output=csv';
 let geoDataUrl = 'world.json';
 let geomData;
 
