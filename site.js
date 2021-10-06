@@ -39,8 +39,8 @@ $(document).ready(function(){
             data_all.forEach(element => {
                 // var href = '<a href="'+element['link']+'" target="blank">Link</a>';
                 // element['link'] = href; 
-                var arr = element['dimension'].split(",");
-                var trimedArr = arr.map(x => x.trim());
+                var arr1 = element['dimension'].split(",");
+                var trimedArr = arr1.map(x => x.trim());
                 var formatedDims = "";
                 trimedArr.forEach(d => {
                     mainTags.includes(d) ? formatedDims +='<label class="alert tag-main">'+d+'</label>' : formatedDims +='<label class="alert tag-alt">'+d+'</label>';
@@ -530,3 +530,7 @@ $(document).ready(function(){
 
 })
 
+
+
+// TO DO 
+// Sample : format number respondents
